@@ -122,7 +122,10 @@ export default tmp;
 
 ```js
 import React from 'react';
-
+  const [number, setnumber] = useState(0);
+  const ChangeCount=(e)=>{
+    setnumber(number+e)
+  }
 function Counter() {
   return (
     <div>
@@ -135,3 +138,123 @@ function Counter() {
 
 export default Counter;
 ```
+```js
+import React, { useState } from 'react';
+
+function InputSample() {
+  const [inputs, setInputs] = useState({
+    name: '',
+    nickname: ''
+  });
+
+  const { name, nickname } = inputs; // 비구조화 할당을 통해 값 추출
+
+  const onChange = (e) => {
+    const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
+    setInputs({
+      ...inputs, // 기존의 input 객체를 복사한 뒤
+      [name]: value // name 키를 가진 값을 value 로 설정
+    });
+  };
+
+  const onReset = () => {
+    setInputs({
+      name: '',
+      nickname: '',
+    })
+  };
+
+
+  return (
+    <div>
+      <input name="name" placeholder="이름" onChange={onChange} value={name} />
+      <input name="nickname" placeholder="닉네임" onChange={onChange} value={nickname}/>
+      <button onClick={onReset}>초기화</button>
+      <div>
+        <b>값: </b>
+        {name} ({nickname})
+      </div>
+    </div>
+  );
+}
+
+export default InputSample;
+```
+
+## useRef(js의 getElementById)
+
+- js에서 DOM을 선택할때 getElementById나 querySelector와 같은 기능이 필요할때 사용합니다.
+
+- 이번 강의에서는 class형 react를 사용하지 않지만 class 형태에서는 React.createRef를 사용합니다.
+
+```js
+import React, { useRef } from 'react';
+const nameInput = useRef();
+  const onReset = () => {
+    setInputs({
+      name: '',
+      nickname: ''
+    });
+    nameInput.current.focus();
+  };
+```
+
+## array Rendering
+
+- 우리가 서버와 rest통신을 통해서 자료를 받아온다고 가정하면 User의 데이터가 배열 행태로 들어오게 될것입니다.
+
+```js
+  const cars = [
+    {
+      id: 1,
+      car: 'bentz',
+      number: '12가1234'
+    },
+    {
+      id: 2,
+      car: 'kia',
+      number: '22타1014'
+    },
+    {
+      id: 3,
+      car: 'morning',
+      number: '19라2038'
+    }
+  ];
+```
+- 위와 같은 데이터들이 있다고 가정하겠습니다.
+- 데이터를 읽어 한줄씩 출력하기위해서는 map을 사용해야합니다. (return 구문안에서는 for문이 사용이 불가합니다)
+
+```js
+import React from 'react';
+import Cars from'../dummy/cars';
+
+function CarLayout({data}){
+    return(
+        <div style = {{border : "1px solid black"}} >
+            <p>{data.id}</p>
+            <p>{data.car}</p>
+            <p>{data.number}</p>
+        </div>
+    )
+}
+
+function Counter() {
+  return (
+    <div>
+        {Cars.map(dummy => {
+           return <CarLayout data = {dummy}/>
+        })}
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+- 결과물 
+
+<img src="./Readmeimg/ArrayRendering.png" style="width : 50vw" ></img>
+
+  git config --global user.email "kimud6003@gmail.com"
+  git config --global user.name "kimud6003"
