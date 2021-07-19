@@ -255,6 +255,3 @@ export default Counter;
 - 결과물 
 
 <img src="./Readmeimg/ArrayRendering.png" style="width : 50vw" ></img>
-
-  git config --global user.email "kimud6003@gmail.com"
-  git config --global user.name "kimud6003"
