@@ -34,6 +34,9 @@ function App(props) {
     })
     nextId.current+=1;
   }
+  const onRemove = (id) => {
+    setCars(Cars.filter(Car => Car.id !== id));
+  }
   return (
     <div className="App">
       {/* <Count/> */}
@@ -43,7 +46,7 @@ function App(props) {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <ArrayRender Cars={Cars}/>
+      <ArrayRender Cars={Cars} onRemove = {onRemove}/>
     </div>
   );
 }
