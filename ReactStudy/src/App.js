@@ -37,6 +37,14 @@ function App(props) {
   const onRemove = (id) => {
     setCars(Cars.filter(Car => Car.id !== id));
   }
+  const onToggle = id => {
+    setCars(
+      Cars.map(car=>
+        car.id === id ? { ...car, active: !car.active } : car
+      )
+    );
+    console.log(Cars);
+  };
   return (
     <div className="App">
       {/* <Count/> */}
@@ -46,7 +54,7 @@ function App(props) {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <ArrayRender Cars={Cars} onRemove = {onRemove}/>
+      <ArrayRender Cars={Cars} onRemove = {onRemove} onToggle = {onToggle}/>
     </div>
   );
 }
