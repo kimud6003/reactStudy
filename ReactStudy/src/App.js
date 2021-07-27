@@ -1,4 +1,4 @@
-import React,{useRef,useState,useMemo} from 'react';
+import React,{useRef,useState,useMemo,useCallback} from 'react';
 // import Count from './component/Count'
 import Dummy from './dummy/cars'
 import CreateCar from './component/CreateCar'
@@ -16,39 +16,39 @@ function App(props) {
     number : ""
   })
   const [Cars, setCars] = useState([...Dummy]) // Dummy데이터를 state로 설정해 변화에 반응하게 세팅
-  const onChange = (e) =>{
+  const onChange = useCallback((e) =>{
     const {name, value}= e.target; // e.target에 있는 name과 value를 들고 온다 
-    setInputs({
+    setInputs(inputs =>({
       ...inputs,
       [name] : value
-    })
-  }
+    }));
+  },[])
   const {car,number} = inputs;
-  const onCreate = () => { //동적 생성 
+  const onCreate = useCallback(() => { //동적 생성 
     const Car = { //현재 Ref의 값과, input값들을 넣어준다 
       id : nextId.current,
       car,
       number
     };
-    setCars(Cars.concat(Car));
+    setCars(Cars => Cars.concat(Car));
     setInputs({
       car:'',
       number:''
     })
     nextId.current+=1;
-  }
-  const onRemove = (id) => {
-    setCars(Cars.filter(Car => Car.id !== id));
-  }
-  const onToggle = id => {
+  },[]);
+  const onRemove = useCallback((id) => {
+    setCars(Cars => Cars.filter(Car => Car.id !== id));
+  },[]);
+  const onToggle = useCallback((id) => {
     setCars(
       Cars.map(car=>
         car.id === id ? { ...car, active: !car.active } : car
       )
     );
-  };
-  // const count = useMemo(() => countActiveCars(Cars), [Cars]);
-  const count = countActiveCars(Cars)
+  },[]);
+  const count = useMemo(() => countActiveCars(Cars), [Cars]);
+  // const count = countActiveCars(Cars)
   return (
     <div className="App">
       {/* <Count/> */}

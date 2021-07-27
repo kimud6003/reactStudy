@@ -25,5 +25,5 @@ CreateCar.propTypes = {
 
 }
 
-export default CreateCar 
+export default React.memo(CreateCar) 
 

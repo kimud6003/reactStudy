@@ -118,6 +118,19 @@ export default tmp;
 
 ## State
 
+- 1. state가 바뀌면 해당 state를 사용하는 컴포넌트와 그 하위 자식 컴포넌트들은 재렌더링 된다. 
+  
+  - 때문에 재렌더링을 최소화하기 위해 필요한 state에 따라 컴포넌트를 분리해야 한다
+  
+  - 대표적으로 삼항연산자, form, 반복문(map, filter...), redux에서 state를 받아 쓰는 부분 등
+
+ 
+- 2. 재 렌더링 된 후에 state가 반영된 것을 확인할 수 있으므로 setState 직후 state를 확인할 수는 없다.
+
+- 3. 객체 형태로 setState를 하면 오브젝트 컴포지션이 되어 덮어씌워져 원하는 동작을 하지 않을 수도 있다.
+  
+  - 함수형 업데이트가 필요한 이유이다.
+  
 - 컴포넌트의 State를 설정하여 관리할수있습니다.
 
 ```js
@@ -223,6 +236,7 @@ const nameInput = useRef();
   ];
 ```
 - 위와 같은 데이터들이 있다고 가정하겠습니다.
+
 - 데이터를 읽어 한줄씩 출력하기위해서는 map을 사용해야합니다. (return 구문안에서는 for문이 사용이 불가합니다)
 
 ```js
@@ -360,6 +374,7 @@ export default Counter;
 ## Hook 정리
 
 - useEffect : 컴포넌트가 마운트, 언마운트 , 업데이트 될때 작업을 처리해라
+
   - deps : deps가 비어 있을경우 컴포넌트가 마운트 될때 useEffect에 등록함수가 실행, 언마운트가 될떄 cleanup 메소드 실행
 > 마운트때 주로하는 작업 : Props값을 로컬 상태 저장, 외부 API호출, 라이브러리 사용
 
@@ -374,11 +389,20 @@ export default Counter;
 ```
 
 - useMemo : 성능 최적화를 위해서 사용
+
   - ex : 존재하는 자동차의 activate 값을 체크하는데, 그냥 구현하면 input을 수정할 때마다 실행이 된다.
+
 <img src="./Readmeimg/usememo전.png " style="width : 25vw"  ></img>
 <img src="./Readmeimg/usememo전2.png " style="width : 30vw" ></img>
+
   - 왜 input을 수정하는데 컴포넌트가 마운트 되는것일까?
-  - input을 수정하면 setInput이 작동하면서 컴포넌트가 마운트 된다.
+
+  - input을 수정하면 setInput이 작동하면서 컴포넌트가 마운트 된다. (이것은 React.memo를 이용하여 방지가능)
+
+  ```js
+  // props가 바뀌지 않는다면 렌더링을 하지 말아라 
+  export default React.memo(CreateCar) 
+  ```
 
 - 따라서 useMemo를 사용해 이전에 사용한 값을 재사용해 효율적이게 만든다.
 
@@ -386,4 +410,55 @@ export default Counter;
   const count = useMemo(() => 최적화를원하는함수(), [변수])수
 ```
  - 첫번째 파라미터에는 함수를 두번째 파라미터에는 deps 배열
+
  - deps 배열 안에 넣은 내용이 바뀌면, 우리가 등록한 함수를 호출해서 값을 연산해주고,만약에 내용이 바뀌지 않았다면 이전에 연산한 값을 재사용
+
+ - useCallback : useMemo 는 특정 결과값을 재사용 , useCallback 은 함수를 만들지 않고 재사용하고 싶을때 사용
+
+ - 함수 안에서 사용하는 state 혹은 props 가 있다면 꼭, deps 배열안에 포함
+
+> Before
+```js
+  const onToggle = (id) => {
+    setCars(
+      Cars.map(car=>
+        car.id === id ? { ...car, active: !car.active } : car
+      )
+    );
+  };
+```
+
+> After
+```js
+  const onToggle = useCallback((id) => {
+    setCars(
+      Cars.map(car=>
+        car.id === id ? { ...car, active: !car.active } : car
+      )
+    );
+  },[Cars]);
+```
+
+## useState (함수형 업데이트로 최적화 하기)
+
+  - setState는 생각해보면 비동기적으로 작동해야 한다(동기적일 경우 state값이 crtical section이 될수도 있다)
+
+  - 그리고 비동기적으로 작업하기 위해서 react에서는 인자들을 순서로 합치는것이 아닌 `하나의 객체로 합쳐(오브젝트 컴포지션)` 진행
+
+  ```js
+  this.state.value = 3;
+  this.setState({ vlaue :this.state.value +1});
+  this.setState({ vlaue :this.state.value +2});
+  this.setState({ vlaue :this.state.value +3});
+  ```
+
+  ```js
+  const singleObj = Object.assign(
+    {},
+    objectFromSetStat1,
+    objectFromSetStat2,
+    objectFromSetStat3,
+  )
+  ```
+  - 이런 비동기적인 방법을 해결하기 위해서 함수형 업데이트를 하면 `오브젝트 컴포지션`을 진행하지 않는다.
+
