@@ -372,3 +372,18 @@ export default Counter;
     };
   }, [deps]);
 ```
+
+- useMemo : 성능 최적화를 위해서 사용
+  - ex : 존재하는 자동차의 activate 값을 체크하는데, 그냥 구현하면 input을 수정할 때마다 실행이 된다.
+<img src="./Readmeimg/usememo전.png " style="width : 25vw"  ></img>
+<img src="./Readmeimg/usememo전2.png " style="width : 30vw" ></img>
+  - 왜 input을 수정하는데 컴포넌트가 마운트 되는것일까?
+  - input을 수정하면 setInput이 작동하면서 컴포넌트가 마운트 된다.
+
+- 따라서 useMemo를 사용해 이전에 사용한 값을 재사용해 효율적이게 만든다.
+
+```js
+  const count = useMemo(() => 최적화를원하는함수(), [변수])수
+```
+ - 첫번째 파라미터에는 함수를 두번째 파라미터에는 deps 배열
+ - deps 배열 안에 넣은 내용이 바뀌면, 우리가 등록한 함수를 호출해서 값을 연산해주고,만약에 내용이 바뀌지 않았다면 이전에 연산한 값을 재사용

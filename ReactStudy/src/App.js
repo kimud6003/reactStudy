@@ -1,4 +1,4 @@
-import React,{useRef,useState} from 'react';
+import React,{useRef,useState,useMemo} from 'react';
 // import Count from './component/Count'
 import Dummy from './dummy/cars'
 import CreateCar from './component/CreateCar'
@@ -6,6 +6,10 @@ import ArrayRender from './component/arrayRender'
 import './App.css';
 
 function App(props) {
+  function countActiveCars(cars) {
+    console.log('활성 자동차수 카운트 ');
+    return cars.filter(car=> car.active).length;
+  }
   const nextId = useRef(4); //더미데이터의 길이가 3이기 때문에 4부터 시작
   const [inputs, setInputs] = useState({ //Input State 설정
     car : "",
@@ -43,6 +47,8 @@ function App(props) {
       )
     );
   };
+  // const count = useMemo(() => countActiveCars(Cars), [Cars]);
+  const count = countActiveCars(Cars)
   return (
     <div className="App">
       {/* <Count/> */}
@@ -53,6 +59,7 @@ function App(props) {
         onCreate={onCreate}
       />
       <ArrayRender Cars={Cars} onRemove = {onRemove} onToggle = {onToggle}/>
+      활성된 자동차수 : {count}
     </div>
   );
 }
