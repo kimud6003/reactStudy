@@ -265,3 +265,110 @@ export default Counter;
 ```
 
 ## 배열 CRUD
+
+- 배열의 CRUD를 하기 위해서 떠올려야 하는것은 React는 state값에 의해 리랜더링을 진행한다는것
+
+- 따라서 dummy 데이터를 state에 넣어줘야할 필요가 있음
+
+- 배열의 key을 사용해 삭제 하거나 바꿀수 있음
+
+``` js
+//app.js
+function App(props) {
+  const nextId = useRef(4); //더미데이터의 길이가 3이기 때문에 4부터 시작
+  const [inputs, setInputs] = useState({ //Input State 설정
+    car : "",
+    number : ""
+  })
+  const [Cars, setCars] = useState([...Dummy]) // Dummy데이터를 state로 설정해 변화에 반응하게 세팅
+  const onChange = (e) =>{
+    const {name, value}= e.target; // e.target에 있는 name과 value를 들고 온다 
+    setInputs({
+      ...inputs,
+      [name] : value
+    })
+  }
+  const {car,number} = inputs;
+  const onCreate = () => { //동적 생성 
+    const Car = { //현재 Ref의 값과, input값들을 넣어준다 
+      id : nextId.current,
+      car,
+      number
+    };
+    setCars(Cars.concat(Car));
+    setInputs({
+      car:'',
+      number:''
+    })
+    nextId.current+=1;
+  }
+  const onRemove = (id) => {
+    setCars(Cars.filter(Car => Car.id !== id));
+  }
+  const onToggle = id => {
+    setCars(
+      Cars.map(car=>
+        car.id === id ? { ...car, active: !car.active } : car
+      )
+    );
+  };
+  return (
+    <div className="App">
+      {/* <Count/> */}
+      <CreateCar
+        carName={car}
+        carNumber={number}
+        onChange={onChange}
+        onCreate={onCreate}
+      />
+      <ArrayRender Cars={Cars} onRemove = {onRemove} onToggle = {onToggle}/>
+    </div>
+  );
+}
+
+export default App;
+```
+
+```js
+import React from 'react';
+
+function CarLayout({data,onRemove,onToggle}){
+    return(
+        <div style = {{border : "1px solid black"}} >
+            <p style = {{cursor: 'pointer',color: data.active ? 'green' : 'black' }}
+               onClick={()=>onToggle(data.id)} >
+              {data.id}: ({data.car}) ({data.number}) 
+              <button onClick={() => onRemove(data.id)}>삭제</button> 
+            </p>
+        </div>
+    )
+}
+
+function Counter({Cars,onRemove,onToggle}) {
+  return (
+    <div>
+        {Cars.map(dummy => {
+           return <CarLayout data = {dummy} key={dummy.id} onRemove ={onRemove} onToggle={onToggle}/>
+        })}
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+## Hook 정리
+
+- useEffect : 컴포넌트가 마운트, 언마운트 , 업데이트 될때 작업을 처리해라
+  - deps : deps가 비어 있을경우 컴포넌트가 마운트 될때 useEffect에 등록함수가 실행, 언마운트가 될떄 cleanup 메소드 실행
+> 마운트때 주로하는 작업 : Props값을 로컬 상태 저장, 외부 API호출, 라이브러리 사용
+
+
+```js
+  useEffect(() => {
+    console.log('컴포넌트 마운트');
+    return () => {
+      console.log('컴포넌트가 언마운트 ');
+    };
+  }, [deps]);
+```
