@@ -255,3 +255,13 @@ export default Counter;
 - 결과물 
 
 <img src="./Readmeimg/ArrayRendering.png" style="width : 50vw" ></img>
+
+- 결과물 자체는 문제 없이 출력 되지만 콘솔창을 들어가보면 key값을 배치해 달라는 글이 있다.
+
+```js
+  {Cars.map(dummy => {
+    return <CarLayout data = {dummy} key = {dummy.id}/>
+  })}
+```
+
+## 배열 CRUD
