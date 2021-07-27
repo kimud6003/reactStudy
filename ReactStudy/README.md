@@ -461,4 +461,113 @@ export default Counter;
   )
   ```
   - 이런 비동기적인 방법을 해결하기 위해서 함수형 업데이트를 하면 `오브젝트 컴포지션`을 진행하지 않는다.
+## useReudcer
 
+- 상태 관리를 하기위해서 지금까지는 useState를 사용해 왔다.
+
+- useState를 사용하면 해당 컴포넌트에서만 사용할수 있다는 단점이 존재
+
+- useReducer를 사용하면 컴포넌트 밖에서도 사용할수 있음
+
+
+```js
+// app.js를 useReducer로
+
+function countActiveCars(Cars) {
+  console.log('활성 사용자 수를 세는중...');
+  return cars.filter(car => car.active).length;
+}
+
+const [Cars, setCars] = useState([...Dummy]) 
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'CHANGE_INPUT':
+      return {
+        ...state,
+        inputs: {
+          ...state.inputs,
+          [action.name]: action.value
+        }
+      };
+    case 'CREATE_car':
+      return {
+        inputs: initialState.inputs,
+        cars: state.cars.concat(action.car)
+      };
+    case 'TOGGLE_car':
+      return {
+        ...state,
+        cars: state.cars.map(car =>
+          car.id === action.id ? { ...car, active: !car.active } : car
+        )
+      };
+    case 'REMOVE_car':
+      return {
+        ...state,
+        cars: state.cars.filter(car => car.id !== action.id)
+      };
+    default:
+      return state;
+  }
+}
+
+function App() {
+  const [state, dispatch] = careducer(reducer, initialState);
+  const nextId = caref(4);
+
+  const { cars } = state;
+  const { carname, email } = state.inputs;
+
+  const onChange = useCallback(e => {
+    const { name, value } = e.target;
+    dispatch({
+      type: 'CHANGE_INPUT',
+      name,
+      value
+    });
+  }, []);
+
+  const onCreate = useCallback(() => {
+    dispatch({
+      type: 'CREATE_car',
+      car: {
+        id: nextId.current,
+        carname,
+        email
+      }
+    });
+    nextId.current += 1;
+  }, [carname, email]);
+
+  const onToggle = useCallback(id => {
+    dispatch({
+      type: 'TOGGLE_car',
+      id
+    });
+  }, []);
+
+  const onRemove = useCallback(id => {
+    dispatch({
+      type: 'REMOVE_car',
+      id
+    });
+  }, []);
+
+  const count = useMemo(() => countActivecars(cars), [cars]);
+  return (
+    <>
+     <CreateCar
+        carName={car}
+        carNumber={number}
+        onChange={onChange}
+        onCreate={onCreate}
+      />
+    <ArrayRender Cars={Cars} onRemove = {onRemove} onToggle = {onToggle}/>
+      활성된 자동차수 : {count}
+    </>
+  );
+}
+
+export default App;
+```
