@@ -30,8 +30,7 @@ const CircleButton = styled.button`
   outline: none;
   display: flex;
   align-items: center;
-  justify-content: center;Z
-
+  justify-content: center;
   transition: 0.125s all ease-in;
   ${props =>
     props.open &&
