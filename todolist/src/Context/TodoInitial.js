@@ -1,4 +1,4 @@
-export const initialTodos = [
+const TodoInitial = [
     {
       id: 1,
       text: '프로젝트 생성하기',
@@ -20,4 +20,6 @@ export const initialTodos = [
       done: false
     }
   ];
+
+export default TodoInitial;
   

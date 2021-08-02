@@ -49,12 +49,11 @@ const CircleButton = styled.button`
 
 function TodoCreate() {
   const [open, setOpen] = useState(false);
-
   const onToggle = () => setOpen(!open);
 
   return (
     <>
-      {open && (<TodoInput/>
+      {open && (<TodoInput setOpen={setOpen}/>
       )}
       <CircleButton onClick={onToggle} open={open}>
         <MdAdd />
