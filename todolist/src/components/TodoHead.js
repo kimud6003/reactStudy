@@ -3,28 +3,31 @@ import styled from 'styled-components';
 import { useTodoState } from '../Context/TodoContext';
 
 const TodoHeadBlock = styled.div`
-  padding-top: 48px;
-  padding-left: 32px;
-  padding-right: 32px;
-  padding-bottom: 24px;
+  padding-top : 32px;
+  padding-bottom : 24px;
+  background-color:#44475a;
+  /* border-radius: 16px; */
   border-bottom: 1px solid #e9ecef;
-  h1 {
-    margin: 0;
-    font-size: 36px;
-    color: #343a40;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+
+  h1{
+    margin:0;
+    font-size:2rem;
+    color : #343a40;
   }
-  .day {
-    margin-top: 4px;
+  .day{
     color: #868e96;
-    font-size: 21px;
+    text-align:right;
   }
-  .tasks-left {
-    color: #20c997;
-    font-size: 18px;
-    margin-top: 40px;
+  .tasks{
+    color: #20C997;
+    font-size:1rem;
     font-weight: bold;
   }
-`;
+
+`
 
 function TodoHead() {
   const todos = useTodoState();
@@ -43,7 +46,7 @@ function TodoHead() {
     <TodoHeadBlock>
       <h1>{dateString}</h1>
       <div className="day">{dayName}</div>
-      <div className="tasks-left"> 해야 할 일 {undoneTasks.length}</div>
+      <div className="tasks"> 해야 할 일 {undoneTasks.length}</div>
     </TodoHeadBlock>
   );
 }

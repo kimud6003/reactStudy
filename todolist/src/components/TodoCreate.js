@@ -4,43 +4,44 @@ import { MdAdd } from 'react-icons/md';
 import TodoInput from './TodoInput';
 
 const CircleButton = styled.button`
-  background: #38d9a9;
+  background: #bd93f9;
   &:hover {
-    background: #63e6be;
+    background: #e2d5f5;
   }
   &:active {
-    background: #20c997;
+    background: #ff79c6;
   }
-
-  z-index: 5;
-  cursor: pointer;
-  width: 80px;
-  height: 80px;
-  display: block;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  position: absolute;
-  left: 50%;
-  bottom: 0px;
-  transform: translate(-50%, 50%);
+  z-index:1;
+  width: 5rem;
+  height: 5rem;
+  font-size: 3rem;
   color: white;
-  border-radius: 50%;
+  
   border: none;
+  border-radius: 50%;
   outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  cursor: pointer;
+  position:absolute;
+  left: 50%;
+  bottom: 0;
+  /* bottom: 10rem; */
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  /* margin: 0 auto; */
   transition: 0.125s all ease-in;
+  transform: translate(-50%, 50%);
   ${props =>
     props.open &&
     css`
-      background: #ff6b6b;
+      background: #ff79c6;
       &:hover {
-        background: #ff8787;
+        background: #e2d5f5;
       }
       &:active {
-        background: #fa5252;
+        background: #e2d5f5;
       }
       transform: translate(-50%, 50%) rotate(45deg);
     `}

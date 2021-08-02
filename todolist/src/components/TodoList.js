@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useTodoState } from '../Context/TodoContext';
+import { useTodoNextId, useTodoState } from '../Context/TodoContext';
 import TodoItem from './TodoItem';
 
 const TodoListBlock = styled.div`
-  flex: 1;
-  padding: 20px 32px;
-  padding-bottom: 48px;
-  overflow-y: auto;
+  padding: 1rem 2rem;
+  padding-bottom: 10rem;
+  overflow:auto;
+  &::-webkit-scrollbar{
+    display:none
+  }
 `;
 
 function TodoList() {
   const todos = useTodoState();
+  const nextId = useTodoNextId;
+  // const lastRef = useRef();
   return (
     <TodoListBlock>
       {todos.map(todo =>(
@@ -20,6 +24,7 @@ function TodoList() {
         id={todo.id}
         text={todo.text}
         done={todo.done} 
+        ref={nextId.current}
         />
       ))}
     </TodoListBlock>
